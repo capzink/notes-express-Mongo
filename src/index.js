@@ -3,8 +3,13 @@ const path=require('path')
 const exphbs=require('express-handlebars')
 const override=require('method-override')
 const session=require('express-session')
+
+
+
 const app= express();
+
 // settings
+
 app.set('port', process.env.PORT ||  3000)
 app.set('views',path.join(__dirname, 'views'))
 app.engine('hbs', exphbs({
@@ -15,6 +20,7 @@ app.engine('hbs', exphbs({
 }))
 
 app.set('view engine', '.hbs')
+
 //midlleware
 
 app.use(express.urlencoded({extended:false}))
@@ -29,13 +35,18 @@ app.use(session({
 //global variables
 
 //routes
+app.use(require('./routes/index'));
+app.use(require('./routes/notes'));
+app.use(require('./routes/users'));
 
 
 //static files
 
 
+
+
 //listen
 
-app.listen(app.get(3000), function(){
+app.listen(app.get('port'), function(){
     console.log('listening on', app.get('port'))
 })
