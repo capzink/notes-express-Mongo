@@ -15,8 +15,8 @@ app.set('port', process.env.PORT ||  3000)
 app.set('views',path.join(__dirname, 'views'))
 app.engine('hbs', exphbs({
     defaultLayout: 'main',
-    layoutDir: path.join(app.get('views'), 'layouts'),
-    partialsDir: path.join(app.get('views'), 'partials'),
+    layoutDir:(app.get('views'),'layout'),
+    partialsDir:(app.get('views'),'partials'),
     extname:'.hbs'
 }))
 
@@ -42,7 +42,7 @@ app.use(require('./routes/users'));
 
 
 //static files
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static('public'))
 
 
 

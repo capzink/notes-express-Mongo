@@ -1,13 +1,16 @@
 const router =require('express').Router();
 
 //ruta de autenticacion
-router.get('/users/signin',(req,res)=>{
+//sign in process
+
+router.get('/users/signup',(req,res)=>{
+    res.render('./users/signup')
+})
+
+router.get('/users',(req,res)=>{
     res.render('users/signin')
 })
 
-router.get('/users/signup',(req,res)=>{
-    res.render('users/signup')
-})
 
 
 
