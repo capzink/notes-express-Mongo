@@ -1,17 +1,15 @@
 const router =require('express').Router();
 
-//ruta de autenticacion
+const Note = require('../models/mdnote')
 
-//notes
+//pagina de formulario para nueva nota
 router.get('/notes/add',(req,res)=>{
     res.render('notes/newnote')
 })
 
-router.get('/notes',(req,res)=>{
-    res.send('signin')
-})
 
-router.post('/notes/newnote',(req,res)=>{
+//tomo los datos del formualrio
+router.post('/notes/newnote',async (req,res)=>{
     console.log(req.body)
     const {title, description}=req.body;
     const errors=[];
@@ -24,9 +22,21 @@ router.post('/notes/newnote',(req,res)=>{
     if(errors.length>0){
         res.render('notes/newnote', {errors,title,description});
     }
+    // model de creacion para mongoDb
     else{
-    res.send('ok');
+    const newNo= new Note({title, description})
+    await newNo.save();
+
+    res.redirect('/notes')
     }
+})
+
+//entrega o puedo consultar lo de la base de datos luego de almacenarlo
+router.get('/notes',async (req,res)=>{
+    // puedo usar los parametros de buscar aprendidos en mongo
+    const notes= await Note.find().sort({date:'desc'}).lean()
+    res.render('notes/allnotes', {notes})
+    
 })
 
 module.exports =router;
