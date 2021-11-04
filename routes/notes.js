@@ -39,4 +39,24 @@ router.get('/notes',async (req,res)=>{
     
 })
 
+//ruta para editar nota
+
+router.get('/notes/edit/:id', async (req,res)=>{
+   const enote= await Note.findById(req.params.id).lean()
+    res.render('notes/edited-notes', {enote})
+})
+//edited notes route
+
+router.put('/notes/edited-notes/:id', async (req,res)=>{
+    const{title, description}=req.body;
+        await Note.findByIdAndUpdate(req.params.id, {title, description}).lean()
+        res.redirect('/notes')
+})
+
+router.delete('/notes/delete/:id',async (req,res)=>{
+    await Note.findByIdAndDelete(req.params.id)
+    res.redirect('/notes')
+
+})
+
 module.exports =router;

@@ -1,7 +1,7 @@
 const express = require('express')
 const path=require('path')
 const exphbs=require('express-handlebars')
-const override=require('method-override')
+const methodOverride=require('method-override')
 const session=require('express-session')
 
 
@@ -25,7 +25,7 @@ app.set('view engine', '.hbs')
 //midlleware
 
 app.use(express.urlencoded({extended:false}))
-app.use(override('_method'))
+app.use(methodOverride('_method'))
 app.use(session({
     secret:'mysecretapp',
     resave: true,
