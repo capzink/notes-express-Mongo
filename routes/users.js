@@ -1,10 +1,12 @@
 const router =require('express').Router();
 
 //para usar base de datos este es el modulo de usuario instancia
-const user =require('../models/user')
+const User =require('../models/user')
 
-//ruta de autenticacion
-//sign in process
+const passport=require('passport')
+
+
+//signin signup process
 
 router.get('/users/signup',(req,res)=>{
     res.render('./users/signup')
@@ -13,6 +15,15 @@ router.get('/users/signup',(req,res)=>{
 router.get('/users/signin',(req,res)=>{
     res.render('users/signin')
 })
+
+//autenticar usuario usando passport
+
+router.post('/users/signin', passport.authenticate('local',{
+    successRedirect:'/notes',
+    failureRedirect: '/users/signin',
+    failureFlash:true
+
+}))
 
 //ruta para recibir datos
 
@@ -34,18 +45,18 @@ router.post('/users/signup', async (req,res)=>{
 
    }else{
     //verificacion que correo no exsita ya
-    const emailUser= await user.findOne({email:'email'})
+    const emailUser= await User.findOne({email:email})
     if(emailUser){
         req.flash('error_msg', 'email already exists')
         res.redirect('/users/signup')
     }
     //creacion de nuevo usuario
-    const newUser= new user({name,email,password})
+    const newUser= new User({name,email,password})
     //guardar contrasena cifrada
     newUser.password= await newUser.encryptPassword(password)
     //guardar usuario
     await newUser.save()
-    req.flash('succes_msg', 'You Are Registered')
+    req.flash('success_msg', 'You Are Registered')
     res.redirect('/users/signin')
    }
 })
