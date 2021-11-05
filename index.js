@@ -9,7 +9,11 @@ const passport=require('passport')
 
 
 const app= express();
+
+//traer la base de datos
 require('./database')
+
+//traer passport
 require('./config/passport')
 
 // settings
