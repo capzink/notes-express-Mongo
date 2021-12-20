@@ -17,18 +17,8 @@
     "passport": "^0.5.0",
     "passport-local": "^1.0.0"
   },
-  "devDependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.5",
-    "@babel/node": "^7.16.5",
-    "@babel/plugin-transform-regenerator": "^7.16.5",
-    "@babel/preset-env": "^7.16.5",
-    "@babel/runtime": "^7.16.5",
-    "ncp": "^2.0.0"
-  },
    "scripts": {
     "dev": "nodemon ./src --exec babel-node",
-    "build": "babel src -d dist && ncp src/views dist/views && ncp src/public dist/public",
-    "start":"node/dist index.js"
+    "start":"nodemon src/index.js"
   }
 }
