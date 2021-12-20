@@ -4,9 +4,9 @@
   "description": "app notas",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
+    "start": "node dist/index.js",
     "build": "babel src -d dist && ncp src/views dist/views",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
   "author": "Carlos Pinzon",
   "license": "ISC",
