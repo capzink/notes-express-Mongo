@@ -24,7 +24,7 @@ app.engine(
   exphbs({
     defaultLayout: "main",
     layoutDir: (app.get("views"), "views/layout"),
-    partialsDir: (app.get("views"), "views/partials"),
+    partialsDir: (app.get("views"), "src/views/partials"),
     extname: ".hbs",
   })
 );
@@ -65,7 +65,7 @@ app.use(require("./routes/notes"));
 app.use(require("./routes/users"));
 
 //static files
-app.use(express.static("public"));
+app.use(express.static("src/public"));
 
 //listen
 
