@@ -1,80 +1,82 @@
-const express = require('express')
-const path=require('path')
-const exphbs=require('express-handlebars')
-const methodOverride=require('method-override')
-const session=require('express-session')
-const flash=require('connect-flash')
-const passport=require('passport')
+const express = require("express");
+require("dotenv").config();
+const path = require("path");
+const exphbs = require("express-handlebars");
+const methodOverride = require("method-override");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
 
 
+const app = express();
 
-const app= express();
+//trae la base de datos
+const connectDB = require("./database");
 
-//traer la base de datos
-require('./database')
-
-//traer passport
-require('./config/passport')
+//trae passport
+require("./config/passport");
 
 // settings
+const port= process.env.PORT || 3000;
+app.set("views", path.join(__dirname, "views"));
+app.engine(
+  "hbs",
+  exphbs({
+    defaultLayout: "main",
+    layoutDir: (app.get("views"), "views/layout"),
+    partialsDir: (app.get("views"), "views/partials"),
+    extname: ".hbs",
+  })
+);
 
-app.set('port', process.env.PORT ||  3000)
-app.set('views',path.join(__dirname, 'views'))
-app.engine('hbs', exphbs({
-    defaultLayout: 'main',
-    layoutDir:(app.get('views'),'views/layout'),
-    partialsDir:(app.get('views'),'views/partials'),
-    extname:'.hbs'
-}))
-
-app.set('view engine', '.hbs')
+app.set("view engine", ".hbs");
 
 //midlleware
 
-app.use(express.urlencoded({extended:false}))
-app.use(methodOverride('_method'))
-app.use(session({
-    secret:'mysecretapp',
+app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride("_method"));
+app.use(
+  session({
+    secret: "mysecretapp",
     resave: true,
-    saveUninitialized:true
-}))
+    saveUninitialized: true,
+  })
+);
 
 //debe ir siempre despues de session este es el passport autenticator
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(flash())
-
-
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 //global variables
 
-app.use((req,res,next)=>{
-    //almacena mensajes flash
-    res.locals.success_msg=req.flash('success_msg')
-    res.locals.error_msg=req.flash('error_msg')
-    //variables globales para errores passport
-    res.locals.error=req.flash('error')
-    next();
-})
-
-
-
-
+app.use((req, res, next) => {
+  //almacena mensajes flash
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  //variables globales para errores passport
+  res.locals.error = req.flash("error");
+  next();
+});
 
 //routes
-app.use(require('./routes/index'));
-app.use(require('./routes/notes'));
-app.use(require('./routes/users'));
-
+app.use(require("./routes/index"));
+app.use(require("./routes/notes"));
+app.use(require("./routes/users"));
 
 //static files
-app.use(express.static('public'))
-
-
-
+app.use(express.static("public"));
 
 //listen
 
-app.listen(app.get('port'), function(){
-    console.log('listening on', app.get('port'))
-})
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI);
+    app.listen(port, () => {
+      console.log("listening on", port );
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+start();
